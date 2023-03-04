@@ -14,66 +14,57 @@
 Советы и рекомендации
 Результирующий массив должен выглядеть так:
 
-0 1 2 3 4 
-9 8 7 6 5 
-10 11 12 13 14 
-19 18 17 16 15 
+0 1 2 3 4
+9 8 7 6 5
+10 11 12 13 14
+19 18 17 16 15
 20 21 22 23 24
 
 Внешний и внутренний циклы идут от 0 до 5, тут ничего нового.
 Первый индекс (строка) тоже без сюрпризов: это значение счётчика внешнего цикла:
 
-for (int i = 0; i < 5; ++i) { 
-        for (int j = 0; j < 5; ++j) { 
-            digits[i][...] = number; 
-            number += 1; 
-        } 
-… 
-    }
+for (int i = 0; i < 5; ++i) {
+		for (int j = 0; j < 5; ++j) {
+			digits[i][...] = number;
+			number += 1;
+		}
+…
+	}
 
 Самое сложное тут — это номер столбца.
 Чтобы сначала двигаться слева направо, а на следующей строке наоборот, стоит завести переменную-множитель,
 которая на чётных строках будет равна 1. На нечётных строках меняет знак: multiplier *= −1;*/
 
 #include <iostream>
+#include <chrono>
 
-//размерность матрицы и вектора
-const int n = 4;
+//размерность матрицы
+const int n = 5;
 
-int main() {
-	float A[n][n];
-	float B[n];
-	float C[n];
-	float r = 1.0;
-
-	//инициализация и вывод матрицы А в консоль
-	std::cout << "A" << std::endl;
+void display(int arr[][n]) {
 	for (int i = 0; i < n; ++i) {
 		for (int j = 0; j < n; ++j) {
-			A[i][j] = 2.0f * (float)i;
-			std::cout << A[i][j] << " ";
+			std::cout << arr[i][j] << " ";
 		}
 		std::cout << std::endl;
 	}
+}
 
-	//инициализация и вывод вектора B в консоль
-	std::cout << "B" << std::endl;
-	for (int i = 0; i < n; ++i) {
-		B[i] = 1.0;
-		std::cout << B[i] << " ";
-	}
-	std::cout << std::endl;
+int main() {
+	int A[n][n];
 
 
-	//умножаем вектор на матрицу и выводим в консоль
-	float summ = 0.0;
-	std::cout << "C" << std::endl;
+	//заполнение змейкой вариант с двумя циклами
+	auto start = std::chrono::system_clock::now();
+	int multiplier = 1;
 	for (int i = 0; i < n; ++i) {
 		for (int j = 0; j < n; ++j) {
-			summ += A[i][j] * B[j];
+			A[i][j] = 2.0f * (float)i;
+			std::cout << A[i][n - (j * ((i % 2) * -1))] << " ";
 		}
-		C[i] = summ;
-		std::cout << C[i] << " ";
-		summ = 0.0;
+		std::cout << std::endl;
 	}
+	std::cout << "Variant 1 - " << std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now() - start).count() << std::endl;
+	display(A);
+
 }
