@@ -33,10 +33,11 @@ for (int i = 0; i < 5; ++i) {
 
 Самое сложное тут — это номер столбца.
 Чтобы сначала двигаться слева направо, а на следующей строке наоборот, стоит завести переменную-множитель,
-которая на чётных строках будет равна 1. На нечётных строках меняет знак: multiplier *= −1;*/
+которая на чётных строках будет равна 1. На нечётных строках меняет знак: multiplier *= −1;
+Что оценивается
+В решении не используются условные конструкции.*/
 
 #include <iostream>
-#include <chrono>
 
 //размерность матрицы
 const int n = 5;
@@ -53,18 +54,16 @@ void display(int arr[][n]) {
 int main() {
 	int A[n][n];
 
-
-	//заполнение змейкой вариант с двумя циклами
-	auto start = std::chrono::system_clock::now();
-	int multiplier = 1;
+	//заполнение змейкой 
+	int cout = 0;
+	int tmp = 0;
 	for (int i = 0; i < n; ++i) {
 		for (int j = 0; j < n; ++j) {
-			A[i][j] = 2.0f * (float)i;
-			std::cout << A[i][n - (j * ((i % 2) * -1))] << " ";
+			tmp = (n - 1) * (i % 2) + j * (((i % 2) * -2) + 1);
+			A[i][tmp] = cout;
+			++cout;
 		}
-		std::cout << std::endl;
 	}
-	std::cout << "Variant 1 - " << std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now() - start).count() << std::endl;
-	display(A);
 
+	display(A);
 }
